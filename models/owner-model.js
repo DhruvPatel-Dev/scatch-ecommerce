@@ -9,7 +9,10 @@ const ownerSchemna = mongoose.Schema({
         type:Array,
         default:[]
     },
-    profile:String
+    gstin:{
+        type:String,
+        default:"none"
+    }
 
 });
 

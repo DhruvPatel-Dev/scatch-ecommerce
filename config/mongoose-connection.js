@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
+const config = require('config'); 
+const debug = require('debug')('development:mongoose');
 
-mongoose.connect("mongodb://127.0.0.1:27017/scatch").then(()=>{
-    console.log("connected");
+
+mongoose.connect(`${config.get("MONGO_URI")}/scatch`).then(()=>{
+   debug("connected");
 }).catch((err)=>{
-    console.log(err)
+    debug(err)
 })
 
 
