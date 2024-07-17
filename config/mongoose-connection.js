@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
-const config = require('config'); 
-const debug = require('debug')('development:mongoose');
+const d = require('debug')('development:mongoose');
+const config=require('config');
 
+///for set value of debug export DEBUG=development:mongoose
+//for all use export DEBUG=development:*
 
-mongoose.connect(`${config.get("MONGO_URI")}/scatch`).then(()=>{
-   debug("connected");
+mongoose.connect(`${process.env.MONGO_URI}/scatch}`).then(()=>{  //to get value from .json use config.get("MONGO_URI")
+   d("connected");
 }).catch((err)=>{
-    debug(err)
+    d(err);
 })
 
 

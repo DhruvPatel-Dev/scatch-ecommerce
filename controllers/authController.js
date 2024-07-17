@@ -1,6 +1,7 @@
 
 const {genrateToken} = require('../utils/genratekey');
 const userModel = require('../models/user-model');
+const productModel = require('../models/product-model');
 const bcrypt = require('bcrypt');
 
 
@@ -13,26 +14,34 @@ authController = async (req,res)=>{
     {      let {fullname,email,password}= req.body;
 
        const user =  await userModel.findOne({email});
-       if(user) return res.send('already');
+       if(user)
+    {
+        req.flash("error","already");
+        return res.redirect('/');
+    }
+       
+    
           bcrypt.hash(password,12,async (err,hash)=>{
-            if(err) return res.send(err)
+            if(err) return res.send(err);
                
              const createdUser = await userModel.create({
                  fullname,email,password:hash });
                 let token = genrateToken(createdUser.email);
                 res.cookie('token',token);
-                res.send("done");
+                return res.redirect('/shop');
     
           })
     
     }
     catch(err)
     {
-     res.send(err.message)
+        req.flash('error',err);
+    return res.redirect('/');
     }
     
 }
 loginUser = async (req,res)=>{
+   try {
     let {email,password} = req.body;
 
     let user = await userModel.findOne({email});
@@ -47,18 +56,47 @@ loginUser = async (req,res)=>{
     {
         let token = genrateToken(user.email);
         res.cookie('token',token);
-        req.flash('error',"Success");
-      return  res.redirect('/');
+        return  res.redirect('/shop');
     }
     else{
-       req.flash("error","wrong Password")
+        req.flash("error","wrong Password");
        return res.redirect('/')
     }
+   } catch (error) {
+      return res.send(error);
+   }
 
 }
 logOut = (req,res)=>{
-     res.cookie('token','');
-     res.redirect('/');
+    try {
+        res.cookie('token','');
+        req.flash("error","logout Success");
+        return res.redirect('/');
+    } catch (error) {
+        return res.send(error);
+    }
 }
+createProduct = async (req,res)=>{
+    try {
+        let { name,price,discount,bgcolor, panelcolor,textcolor} = req.body;
+      
+   
+       await productModel.create({
+           image:req.file.buffer,
+           name,
+           price,
+           discount,
+           bgcolor,
+           panelcolor,
+           textcolor
+   
+       })
+       req.flash("success","product created successfully");
+     return  res.redirect('/owners/admin');
+    } catch (error) {
+    return res.send(error);
+    }
+}
+   
 
-module.exports={authController,loginUser,logOut};
+module.exports={authController,loginUser,logOut, createProduct };

@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require('dotenv').config();
 const path = require('path');
 const session = require('express-session')
 const cookieParser = require("cookie-parser");
@@ -8,8 +9,7 @@ const usersRouter = require('./routes/usersRouter');
 const ownersRouter = require('./routes/ownersRouter');
 const productsRouter = require('./routes/productsRouter');
 const indexRouter = require('./routes/index');
-const flash = require("flash");
-require('dotenv').config();
+const flash = require('connect-flash');
 
 app.use(cookieParser());
 app.use(session({
