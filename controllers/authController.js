@@ -3,6 +3,7 @@ const {genrateToken} = require('../utils/genratekey');
 const userModel = require('../models/user-model');
 const productModel = require('../models/product-model');
 const bcrypt = require('bcrypt');
+const ownermodel= require('../models/owner-model');
 
 
 
@@ -76,6 +77,32 @@ logOut = (req,res)=>{
         return res.send(error);
     }
 }
+loginOwner= async(req,res)=>{
+    try {
+        let {email,password} = req.body;
+    
+        let owner = await ownermodel.findOne({email});
+        if(!owner){ 
+    
+            req.flash("error","not valid owner");
+            return res.redirect('/owners/login');
+        }
+       const result = await bcrypt.compare(password,owner.password);
+    
+       if(result===true)
+        {
+            let token = genrateToken(owner.email);
+            res.cookie('token',token);
+            return  res.redirect('/owners/createproduct');
+        }
+        else{
+            req.flash("error","wrong Password");
+           return res.redirect('/owners/login')
+        }
+       } catch (error) {
+          return res.send(error);
+       }
+}   
 createProduct = async (req,res)=>{
     try {
         let { name,price,discount,bgcolor, panelcolor,textcolor} = req.body;
@@ -97,6 +124,5 @@ createProduct = async (req,res)=>{
     return res.send(error);
     }
 }
-   
 
-module.exports={authController,loginUser,logOut, createProduct };
+module.exports={authController,loginUser,logOut, createProduct,loginOwner};
