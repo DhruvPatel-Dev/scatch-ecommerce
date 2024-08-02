@@ -11,8 +11,7 @@ const ownermodel= require('../models/owner-model');
 authController = async (req,res)=>{
 
 
-    try
-    {      let {fullname,email,password}= req.body;
+    let {fullname,email,password}= req.body;
 
        const user =  await userModel.findOne({email});
        if(user)
@@ -33,12 +32,8 @@ authController = async (req,res)=>{
     
           })
     
-    }
-    catch(err)
-    {
-        req.flash('error',err);
-    return res.redirect('/');
-    }
+    
+    
     
 }
 loginUser = async (req,res)=>{
@@ -125,4 +120,4 @@ createProduct = async (req,res)=>{
     }
 }
 
-module.exports={authController,loginUser,logOut, createProduct,loginOwner};
+module.exports={authController,loginUser,logOut,createProduct,loginOwner};

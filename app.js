@@ -11,6 +11,7 @@ const productsRouter = require('./routes/productsRouter');
 const indexRouter = require('./routes/index');
 const flash = require('connect-flash');
 
+app.use(express.urlencoded({extended:true}))
 app.use(cookieParser());
 app.use(session({
     secret: process.env.SECRET_KEY,
@@ -21,7 +22,6 @@ app.use(session({
 
 app.use(flash());
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
 app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname,"public")));
 
@@ -33,4 +33,6 @@ app.use('/owners',ownersRouter);
 app.use('/users',usersRouter);
 app.use('/products',productsRouter);
 app.use('/',indexRouter);
-app.listen(3000);
+app.listen(process.env.PORT||3000,(err)=>{
+    if(err) console.log(err)
+});

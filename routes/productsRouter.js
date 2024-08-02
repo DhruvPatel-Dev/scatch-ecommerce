@@ -7,5 +7,5 @@ const{createProduct} =require('../controllers/authController')
 router.post('/create',upload.single('image'),createProduct);
 
 
-
+    
 module.exports = router;

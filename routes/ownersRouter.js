@@ -6,8 +6,8 @@ const { isLoggedInOwner } = require('../middlewares/isLoggedIn');
 const bcrypt = require('bcrypt');
 
 
-if(process.env.NODE_ENV==='development')
- {
+// if(process.env.NODE_ENV==='development')
+//  {
     router.post('/create', async (req,res)=>{
 
        let owners = await ownermodel.find();
@@ -18,8 +18,9 @@ if(process.env.NODE_ENV==='development')
        }
        else{
         let {fullname,email,password} = req.body;
+
             bcrypt.hash(password,12,async function(err,hash){
-                
+                if(err) return res.send(err);
         const owner = await ownermodel.create({
             fullname,
             email,
@@ -31,18 +32,17 @@ if(process.env.NODE_ENV==='development')
         
        }
     })
- }  
-router.get('/login',(req,res)=>{
+ 
+router.route('/login').get((req,res)=>{
     let error = req.flash("error");
     res.render('owner-login',{error,isLoggedIn:false});
-})
-router.post('/login',loginOwner);
+}).post(loginOwner);
 
-router.get('/createproduct',isLoggedInOwner,(req,res)=>{
+router.route('/createproduct').get(isLoggedInOwner,(req,res)=>{
     let success = req.flash("success")
     res.render('createproducts',{success,isLoggedIn:false});
-}
-)
+});
+
 
 
 

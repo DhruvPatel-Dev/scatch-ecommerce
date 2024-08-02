@@ -13,13 +13,13 @@ router.get('/cart/:product_id/:update',isLoggedIn,async (req,res)=>{
    if(req.params.update==='add')
    {  
      user.cart.push(req.params.product_id);
-      await user.save();
+     await user.save();
      res.redirect('/cart'); 
    }else{
      const index = await user.cart.indexOf(`${req.params.product_id}`);
      user.cart.splice(index,1)
      await user.save();
-   res.redirect('/cart'); 
+     res.redirect('/cart'); 
    }
 
 
