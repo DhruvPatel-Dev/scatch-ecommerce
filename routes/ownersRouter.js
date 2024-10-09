@@ -6,9 +6,7 @@ const { isLoggedInOwner } = require('../middlewares/isLoggedIn');
 const bcrypt = require('bcrypt');
 
 
-// if(process.env.NODE_ENV==='development')
-//  {
-    router.post('/create', async (req,res)=>{
+router.post('/create', async (req,res)=>{
 
        let owners = await ownermodel.find();
 
