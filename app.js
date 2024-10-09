@@ -33,6 +33,6 @@ app.use('/owners',ownersRouter);
 app.use('/users',usersRouter);
 app.use('/products',productsRouter);
 app.use('/',indexRouter);
-app.listen(process.env.PORT,(err)=>{
-    if(err) console.log(err)
+app.listen(process.env.PORT||3000,()=>{
+    console.log("server started ")
 });
